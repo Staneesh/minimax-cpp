@@ -35,5 +35,13 @@ int main()
 
     std::cout << "INFO: Game state = " << game.evaluate() << std::endl;
 
+    game.make_a_move(5, Game::Move::Player2);
+
+    std::cout << "INFO: Game state = " << game.evaluate() << std::endl;
+
+    game.make_a_move(9, Game::Move::Player2);
+
+    std::cout << "INFO: Game state = " << game.evaluate() << std::endl;
+
     return 0;
 }
