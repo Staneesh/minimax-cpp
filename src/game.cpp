@@ -63,52 +63,6 @@ int Game::horizontal(unsigned start) const
     }
 
     return score;
-
-    /*
-        if (what_at_start == what_next == what_after == Move::Empty)
-        {
-            return 0;
-        }
-
-        int left_result = 0; // starting from left side going right
-        if (what_at_start != Move::Empty && what_next == what_at_start)
-        {
-            if (what_at_start == what_after)
-            {
-                // all 3 are nonempty and equal
-                left_result = 3;
-            }
-            else
-            {
-                left_result = 2;
-            }
-
-            if (what_at_start == Move::Player2)
-            {
-                left_result *= -1;
-            }
-        }
-
-        int right_result = 0; // starting from right side going left
-        if (what_after != Move::Empty && what_next == what_after)
-        {
-            // know that cannot be same all 3
-            right_result = 2;
-
-            if (what_after == Move::Player2)
-            {
-                right_result *= -1;
-            }
-        }
-
-        if (left_result == 0 && what_at_start != Move::Empty)
-        {
-            if (what_at_start == Move::Player1)
-            {
-                return 1;
-            }
-        }
-    */
 }
 
 int Game::vertical(unsigned start) const
@@ -182,13 +136,10 @@ int Game::diagonal(unsigned start) const
     return score;
 }
 
-int Game::aggregate_result(int result, std::initializer_list<int> temp) const
+int Game::aggregate_result(int result, int temp) const
 {
-    for (auto &&e : temp) // loop through temporary results
-    {
-        if (abs(e) > abs(result))
-            result = e;
-    }
+    if (abs(temp) > abs(result))
+        result = temp;
 
     return result;
 }

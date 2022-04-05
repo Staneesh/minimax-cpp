@@ -11,7 +11,7 @@ class Game
     int horizontal(unsigned start) const;
     int vertical(unsigned start) const;
     int diagonal(unsigned start) const;
-    int aggregate_result(int result, std::initializer_list<int> temp) const;
+    int aggregate_result(int result, int temp) const;
 
 public:
     enum Move
