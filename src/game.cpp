@@ -101,7 +101,7 @@ int Game::vertical(unsigned start) const
 int Game::diagonal(unsigned start) const
 {
     // one of 2 possibilities - start is either 0 or 3.
-    if (start != 0 && start != 3)
+    if (start != 0 && start != 2)
     {
         std::cerr << "Error: Game::horizontal will not evaluate a bad position! Exiting..." << std::endl;
         exit(1);
@@ -112,7 +112,7 @@ int Game::diagonal(unsigned start) const
     {
         for (unsigned i = 0; i < 9; i += 4) // 0, 4, 8
         {
-            const char current_element = memory[start + i];
+            const char current_element = memory[i];
             if (current_element == Move::Player1)
             {
                 score += 1;
@@ -123,11 +123,11 @@ int Game::diagonal(unsigned start) const
             }
         }
     }
-    else // start == 3
+    else // start == 2
     {
         for (unsigned i = 2; i < 7; i += 2) // 2, 4, 6
         {
-            const char current_element = memory[start + i];
+            const char current_element = memory[i];
             if (current_element == Move::Player1)
             {
                 score += 1;
@@ -165,7 +165,7 @@ int Game::evaluate()
             int vertical = this->vertical(starting_position);
             result = aggregate_result(result, vertical);
         }
-        if (starting_position == 0 || starting_position == 3)
+        if (starting_position == 0 || starting_position == 2)
         {
             int diagonal = this->diagonal(starting_position);
             result = aggregate_result(result, diagonal);
