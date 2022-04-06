@@ -1,19 +1,10 @@
 #include <iostream>
 
-#include "minimax.hpp"
 #include "game.hpp"
 
 int main()
 {
-    auto mt_opt = MinimaxTree::init(3);
-    if (!mt_opt.has_value())
-    {
-        std::cerr << "Error: MinimaxTree::init() failed! Exiting..." << std::endl;
-        return 1; // stanim: Error code
-    }
-    MinimaxTree minimax_tree = std::move(mt_opt.value());
-
-    auto gm_opt = Game::init();
+    auto gm_opt = Game::init(2);
     if (!gm_opt.has_value())
     {
         std::cerr << "Error: Game::init() failed! Exiting..." << std::endl;
@@ -39,9 +30,13 @@ int main()
 
     std::cout << "INFO: Game state = " << game.evaluate() << std::endl;
 
-    game.make_a_move(9, Game::Move::Player2);
+    // game.make_a_move(9, Game::Move::Player2);
 
-    std::cout << "INFO: Game state = " << game.evaluate() << std::endl;
+    // std::cout << "INFO: Game state = " << game.evaluate() << std::endl;
+
+    auto prediction = game.predict_next_move(0, Game::Player1);
+
+    std::cout << "INFO: Predicting next move: " << prediction.first << " " << prediction.second << std::endl;
 
     return 0;
 }

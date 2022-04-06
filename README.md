@@ -12,7 +12,7 @@ Ensure you have cmake and make installed on your system. If you do not, use (ass
 
 Configure cmake:
 
-`cd build && cmake ../`
+`mkdir build && cd build && cmake ../`
 
 And build:
 
