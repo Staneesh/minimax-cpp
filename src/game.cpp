@@ -55,10 +55,12 @@ int Game::horizontal(unsigned start) const
     }
 
     int score = 0;
+    std::vector<char> elems;
     // checking for players' scores
     for (unsigned i = 0; i < 3; i++)
     {
         const char current_element = memory[start + i];
+        elems.push_back(current_element);
         if (current_element == Move::Player1)
         {
             score += 1;
@@ -69,6 +71,14 @@ int Game::horizontal(unsigned start) const
         }
     }
 
+    if (elems[0] != Move::Empty && elems[1] != Move::Empty && elems[2] != Move::Empty)
+    {
+        if ((elems[0] == elems[1] && elems[1] == elems[1]) == false)
+        {
+            // std::cout << "SEE ZERO" << std::endl;
+            return 0;
+        }
+    }
     return score;
 }
 
@@ -82,10 +92,12 @@ int Game::vertical(unsigned start) const
     }
 
     int score = 0;
+    std::vector<char> elems;
     // checking for players' scores
     for (unsigned i = 0; i < 3; i++)
     {
         const char current_element = memory[i * 3 + start];
+        elems.push_back(current_element);
         if (current_element == Move::Player1)
         {
             score += 1;
@@ -96,6 +108,14 @@ int Game::vertical(unsigned start) const
         }
     }
 
+    if (elems[0] != Move::Empty && elems[1] != Move::Empty && elems[2] != Move::Empty)
+    {
+        if ((elems[0] == elems[1] && elems[1] == elems[1]) == false)
+        {
+            // std::cout << "SEE ZERO" << std::endl;
+            return 0;
+        }
+    }
     return score;
 }
 
@@ -109,11 +129,13 @@ int Game::diagonal(unsigned start) const
     }
 
     int score = 0;
+    std::vector<char> elems;
     if (start == 0)
     {
         for (unsigned i = 0; i < 9; i += 4) // 0, 4, 8
         {
             const char current_element = memory[i];
+            elems.push_back(current_element);
             if (current_element == Move::Player1)
             {
                 score += 1;
@@ -129,6 +151,7 @@ int Game::diagonal(unsigned start) const
         for (unsigned i = 2; i < 7; i += 2) // 2, 4, 6
         {
             const char current_element = memory[i];
+            elems.push_back(current_element);
             if (current_element == Move::Player1)
             {
                 score += 1;
@@ -140,6 +163,14 @@ int Game::diagonal(unsigned start) const
         }
     }
 
+    if (elems[0] != Move::Empty && elems[1] != Move::Empty && elems[2] != Move::Empty)
+    {
+        if ((elems[0] == elems[1] && elems[1] == elems[1]) == false)
+        {
+            // std::cout << "SEE ZERO" << std::endl;
+            return 0;
+        }
+    }
     return score;
 }
 
