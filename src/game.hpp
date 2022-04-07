@@ -1,10 +1,10 @@
 #pragma once
 #include <optional>
-
+#include <vector>
 class Game
 {
     static unsigned MAX_SUPPORTED_DEPTH;
-    char memory[9];
+    std::vector<char> memory;
     unsigned depth;
 
     Game(unsigned depth);
@@ -25,6 +25,7 @@ public:
     bool make_a_move(unsigned position, Move m);
     int evaluate();
     unsigned empty_spaces() const;
+    void print_memory() const;
 
     // returns a pair of position+score
     std::pair<unsigned, int> predict_next_move(unsigned current_depth = 0, Move active_player = Move::Player1, unsigned previous_move = 13, int alpha = -10, unsigned beta = 10);

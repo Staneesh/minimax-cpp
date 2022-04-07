@@ -17,7 +17,7 @@ bool Game::make_a_move(unsigned position, Move m)
         return false;
     }
     auto element = &this->memory[position - 1];
-    if (*element != Move::Empty)
+    if (*element != Move::Empty && m != Move::Empty)
     {
         // std::cerr << "Warning: Game::make_a_move will not make a move because spot nonempty!" << std::endl;
         return false;
@@ -31,6 +31,7 @@ bool Game::make_a_move(unsigned position, Move m)
 Game::Game(unsigned depth)
 {
     this->depth = depth;
+    this->memory.resize(9);
     for (unsigned i = 0; i < 9; ++i)
     {
         memory[i] = Move::Empty;
@@ -160,7 +161,7 @@ int Game::evaluate()
             int horizontal = this->horizontal(starting_position);
             result = aggregate_result(result, horizontal);
         }
-        
+
         if (starting_position < 3)
         {
             int vertical = this->vertical(starting_position);
@@ -194,19 +195,19 @@ std::pair<unsigned, int> Game::predict_next_move(unsigned current_depth, Move ac
 
     if (abs(current_score) == 3)
     {
-        //std::cerr << "abs(current_score) == 3, returning {" << previous_move << ", " << current_score << "}..." << std::endl;
+        std::cerr << "abs(current_score) == 3, returning {" << previous_move << ", " << current_score << "}..." << std::endl;
         return {previous_move, current_score};
     }
 
     if (this->empty_spaces() == 0)
     {
-        //std::cerr << "No more room for a move, returning {" << previous_move << ", " << current_score << "}..." << std::endl;
+        std::cerr << "No more room for a move, returning {" << previous_move << ", " << current_score << "}..." << std::endl;
         return {previous_move, current_score};
     }
 
     if (this->depth == current_depth)
     {
-        //std::cerr << "Max depth reached, returning {" << previous_move << ", " << current_score << "}..." << std::endl;
+        std::cerr << "Max depth reached, returning {" << previous_move << ", " << current_score << "}..." << std::endl;
         return {previous_move, current_score};
     }
 
@@ -219,25 +220,29 @@ std::pair<unsigned, int> Game::predict_next_move(unsigned current_depth, Move ac
         {
             if (make_a_move(i, Move::Player1))
             {
-                //std::cerr << "Player 1 made a move on position " << i << std::endl;
+                std::cerr << "Player 1 made a move on position " << i << std::endl;
                 auto after_move = predict_next_move(current_depth + 1, Move::Player2, i, alpha, beta);
-                //std::cerr << "after_move.first = " << after_move.first << " after_move.second = " << after_move.second << std::endl;
+                std::cerr << "after_move.first = " << after_move.first << " after_move.second = " << after_move.second << std::endl;
+                make_a_move(i, Move::Empty);
+                std::cerr << "Undoing a move by player1 on position " << i << std::endl;
+                this->print_memory();
                 if (after_move.second > score_to_maximize)
                 {
                     score_to_maximize = after_move.second;
                     winning_position = after_move.first;
                 }
-                if(alpha < score_to_maximize) {
+                if (alpha < score_to_maximize)
+                {
                     alpha = score_to_maximize;
                 }
-                if(beta <= alpha) {
+                if (beta <= alpha)
+                {
                     break;
                 }
-                make_a_move(i, Move::Empty);
             }
         }
 
-        //std::cerr << "returning { " << winning_position << ", " << score_to_maximize << " }..." << std::endl;
+        std::cerr << "returning { " << winning_position << ", " << score_to_maximize << " }..." << std::endl;
         return {winning_position, score_to_maximize};
     }
     else
@@ -249,25 +254,44 @@ std::pair<unsigned, int> Game::predict_next_move(unsigned current_depth, Move ac
         {
             if (make_a_move(i, Move::Player2))
             {
-                //std::cerr << "Player 2 made a move on position " << i << std::endl;
+                std::cerr << "Player 2 made a move on position " << i << std::endl;
                 auto after_move = predict_next_move(current_depth + 1, Move::Player1, i);
-                //std::cerr << "after_move.first = " << after_move.first << " after_move.second = " << after_move.second << std::endl;
+                std::cerr << "after_move.first = " << after_move.first << " after_move.second = " << after_move.second << std::endl;
+                make_a_move(i, Move::Empty);
+                std::cerr << "Undoing a move by player2 on position " << i << std::endl;
+                this->print_memory();
                 if (after_move.second < score_to_minimize)
                 {
                     score_to_minimize = after_move.second;
                     winning_position = after_move.first;
                 }
-                if(beta > score_to_minimize) {
+                if (beta > score_to_minimize)
+                {
                     beta = score_to_minimize;
                 }
-                if(beta <= alpha) {
+                if (beta <= alpha)
+                {
                     break;
                 }
-                make_a_move(i, Move::Empty);
             }
         }
 
-        //std::cerr << "returning { " << winning_position << ", " << score_to_minimize << " }..." << std::endl;
+        std::cerr << "returning { " << winning_position << ", " << score_to_minimize << " }..." << std::endl;
         return {winning_position, score_to_minimize};
     }
+}
+
+void Game::print_memory() const
+{
+    std::cout << "MEMORY: " << std::endl;
+    for (unsigned i = 0; i < 9; ++i)
+    {
+
+        std::cout << memory[i] << " ";
+        if ((i + 1) % 3 == 0)
+        {
+            std::cout << std::endl;
+        }
+    }
+    std::cout << std::endl;
 }
