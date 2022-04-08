@@ -28,17 +28,38 @@ int main()
 
     while (game.evaluate() != 3 && game.empty_spaces() != 0)
     {
-        std::cout << "Make a move [1-9]" << std::endl;
         int move;
-        std::cin >> move;
-        game.make_a_move(move, Game::Move::Player1);
+        bool isMoveProper = false;
+        while(!isMoveProper) {
+            std::cout << "Make a move [1-9]" << std::endl;
+            std::cin >> move;
+            isMoveProper = game.make_a_move(move, Game::Move::Player1);
+            system("CLS");
+            game.print_memory();
+        }
+
+        if (game.evaluate() == 3)
+        {
+            std::cout << "Human wins!";
+            break;
+        }
+        if (game.empty_spaces() == 0)
+        {
+            std::cout << "It is a draw. *yawn*";
+            break;
+        }
+
         game.print_memory();
-        std::cout << "INFO: Game state = " << game.evaluate() << std::endl;
+        //std::cout << "INFO: Game state = " << game.evaluate() << std::endl;
         auto prediction = game.predict_next_move(0, Game::Player1);
-        std::cout << "PREDICITON {" << prediction.first << " " << prediction.second << "}" << std::endl;
+        //std::cout << "PREDICITON {" << prediction.first << " " << prediction.second << "}" << std::endl;
         game.make_a_move(prediction.first, Game::Move::Player2);
+        system("CLS");
         game.print_memory();
-        std::cout << "INFO: Game state = " << game.evaluate() << std::endl;
+        if (game.evaluate() == -3) {
+            std::cout << "AI wins!";
+            break;
+        }
     }
 
     // game.make_a_move(1, Game::Move::Player2);
